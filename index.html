@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Africa Health Checker v4</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;padding:20px;background:#f0f8ff;text-align:center}
+h1{color:#006400}
+.card{background:white;padding:20px;border-radius:10px;box-shadow:0 2px 5px #ccc;margin-top:20px}
+button{background:#006400;color:white;padding:12px 20px;border:none;border-radius:8px;margin:5px;font-size:16px}
+input{padding:10px;margin:5px;width:80%;border-radius:5px;border:1px solid #ccc}
+.warning{color:red;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>🇰🇪 Africa Health Checker v4</h1>
+<p class="warning">NOT a diagnosis. For emergencies call 999. See a clinician.</p>
+
+<div class="card" id="app">
+<input id="name" placeholder="Patient Name"><br>
+<input id="age" placeholder="Age" type="number"><br>
+<button onclick="start()">Start Check</button>
+</div>
+
+<script>
+let name=""; let age=0; let i=0; let answers=[];
+let q = ["Fever?","Chills?","Cough?","Headache?","Stomach pain?","Very tired?","Very thirsty?","Difficulty breathing?","Skin rash?","Nausea/Vomiting?"];
+
+function start(){
+  name=document.getElementById("name").value;
+  age=document.getElementById("age").value;
+  if(name=="" || age==""){alert("Enter name and age"); return;}
+  i=0; answers=[]; ask();
+}
+function ask(){
+  if(i<q.length){
+    document.getElementById("app").innerHTML = `<h3>${q[i]}</h3><button onclick="ans('yes')">Yes / Ndio</button> <button onclick="ans('no')">No / Hapana</button>`;
+  } else { result(); }
+}
+function ans(a){ answers.push(a); i++; ask(); }
+function result(){
+  let yes = answers.filter(x=>x=='yes').length;
+  let msg = "";
+  if(answers[7]=="yes") msg = "🚨 Difficulty breathing - Seek care URGENTLY";
+  else if(yes>=4) msg = "⚠️ Multiple symptoms. Please see a clinician soon";
+  else if(yes>=2) msg = "🟡 Monitor at home. Rest, fluids. If worse, see clinician";
+  else msg = "✅ Likely mild. Rest, fluids, monitor 48hrs";
+  
+  document.getElementById("app").innerHTML = `<h2>Result for ${name}</h2><p>${msg}</p><button onclick="location.reload()">New Patient</button>`;
+}
+</script>
+</body>
+</html>
